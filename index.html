@@ -57,6 +57,8 @@
 
         <script>
 
+            const root = document.documentElement;
+
             function assert(condition, message = "generic msg"){
                 if(!condition){
                     alert(`assertion failed: ${message}`);
@@ -69,10 +71,15 @@
                 return result;
             }
 
+            function getCustomeWhitish(){
+                let result = getComputedStyle(root).getPropertyValue('--custom-whitish');
+                assert(result, 'could not find the --custom-whitish');
+                return result;
+            }
+
+
             // get rid of this in prod. Only here so I can know when a change goes through
-            // window.onload = () => {
-            //     alert('Page refreshed at ' + new Date().toLocaleTimeString());
-            // };
+            // window.onload = () => { alert('Page refreshed at ' + new Date().toLocaleTimeString()); };
 
             const show_keyboard_button = getElemById('show-keyboard-button');
 
@@ -87,6 +94,9 @@
                 const div = document.createElement('div');
                 div.classList.add('grid-item');
                 div.id = `grid-item-${i}`; // give each square it's own id so I can get it easily
+                div.addEventListener('click', function(){
+                    this.style.backgroundColor = 'red';
+                });
                 gridContainer.appendChild(div);
             }
 
@@ -119,9 +129,11 @@
                 if(isSingleLetter(key_str)){
                     assert(square, "didn't find a square w/ index: " + index);
                     square.textContent = key_str.toLocaleUpperCase();
+                    square.style.backgroundColor = '#ffdd99';
                     incIndex();
                 } else if(key_str == 'Backspace'){
                     square.textContent = "";
+                    square.style.backgroundColor = getCustomeWhitish();
                     decIndex();
                 }
             });
