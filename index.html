@@ -2,96 +2,130 @@
 <html>
 <head>
     <style>
-        .container {
+        :root {
+            --square-size: 15vw; /* You can change this to tweak the size of the squares */
+            --custom-whitish: #f0f0f0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column; /* This makes the grid and the button stack vertically */
+            justify-content: flex-start; /* This places the grid and the button towards the top */
+            align-items: center; /* This centers the grid and the button horizontally */
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            padding-top: 20px;
+        }
+
+        #show-keyboard-button {
+            width: 150px; /* Adjust to make the button wider or narrower */
+            height: 50px; /* Adjust to make the button taller or shorter */
+            margin-top: 20px; /* Adds some space between the grid and the button */
+            font-size: 20px; /* Adjust to make the text bigger or smaller */
+        }
+
+        #grid-container {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-auto-rows: 10vh;
-            grid-gap: 5px;
+            grid-template-columns: repeat(5, var(--square-size));
+            grid-template-rows: repeat(6, var(--square-size));
+            gap: 10px;
+            /* background-color: gray; */
         }
 
-        .square {
-            box-sizing: border-box;
-            width: 100%;
-            height: 100%;
-            padding: 12.5%;
-            font-size: calc(1/8 * 100vw);
-            background-color: black;
-            color: white;
+        .grid-item {
+            width: var(--square-size);
+            height: var(--square-size);
+            background-color: var(--custom-whitish);
+            border: 3px solid gray;
+
+            /* The following part is about the text in the boxes */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            border: none;
-            outline: none;
+            font-size: calc(var(--square-size) / 1.1); /* Make the font barely smaller than the squares */
         }
-
     </style>
 </head>
-<body>
-    <div class="container">
+    <body>
+        <div id="grid-container"></div>
 
-        <!-- workaround to make it so there's a keyboard available on mobile -->
-        <input type="text" id="hidden-input" style="opacity: 0; position: absolute;">
+        <input type="text" id="hidden-input" style="opacity: 0; position: absolute; pointer-events: none;">
 
-        <div class="square" id="square0"></div>
-        <div class="square" id="square1"></div>
-        <div class="square" id="square2"></div>
-        <div class="square" id="square3"></div>
-        <div class="square" id="square4"></div>
+        <button id="show-keyboard-button">Show Keyboard</button>
 
-        <div class="square" id="square5"></div>
-        <div class="square" id="square6"></div>
-        <div class="square" id="square7"></div>
-        <div class="square" id="square8"></div>
-        <div class="square" id="square9"></div>
+        <script>
 
-        <div class="square" id="square10"></div>
-        <div class="square" id="square11"></div>
-        <div class="square" id="square12"></div>
-        <div class="square" id="square13"></div>
-        <div class="square" id="square14"></div>
+            function assert(condition, message = "generic msg"){
+                if(!condition){
+                    alert(`assertion failed: ${message}`);
+                }
+            }
 
-        <div class="square" id="square15"></div>
-        <div class="square" id="square16"></div>
-        <div class="square" id="square17"></div>
-        <div class="square" id="square18"></div>
-        <div class="square" id="square19"></div>
+            function getElemById(id){
+                let result = document.getElementById(id);
+                assert(result, `failed to get element with id '${id}'`);
+                return result;
+            }
 
-        <div class="square" id="square20"></div>
-        <div class="square" id="square21"></div>
-        <div class="square" id="square22"></div>
-        <div class="square" id="square23"></div>
-        <div class="square" id="square24"></div>
+            // get rid of this in prod. Only here so I can know when a change goes through
+            // window.onload = () => {
+            //     alert('Page refreshed at ' + new Date().toLocaleTimeString());
+            // };
 
-        <div class="square" id="square25"></div>
-        <div class="square" id="square26"></div>
-        <div class="square" id="square27"></div>
-        <div class="square" id="square28"></div>
-        <div class="square" id="square29"></div>
-        
-    </div>
-    <button id="show-keyboard">Show Keyboad</button>
+            const show_keyboard_button = getElemById('show-keyboard-button');
 
-    <script>
-        let input = document.getElementById('hidden-input');
-        input.focus(); // automatically 'focus' on the input when the page loads so mobile can get a keyboard
+            // trick to make keyboard show up on mobile devices.
+            show_keyboard_button.addEventListener('click', () => {
+                getElemById('hidden-input').focus();
+            });
 
-        let keyboard_button = document.getElementById('show-keyboard');
-        keyboard_button.addEventListener('click', () => {
-            input.focus();
-        });
-        let index = 0;
-        
-        document.body.addEventListener('keydown', function(event) {
-            let key = event.key;
-        
-            // Don't capture special keys like Shift, Ctrl, etc.
-            if (key.length === 1) {
-                let square = document.getElementById('square' + index);
-        
-                if (square) {
-                    square.textContent = key;
+            // Generate the grid squares
+            const gridContainer = document.getElementById('grid-container');
+            for (let i = 0; i < 30; i++) {
+                const div = document.createElement('div');
+                div.classList.add('grid-item');
+                div.id = `grid-item-${i}`; // give each square it's own id so I can get it easily
+                gridContainer.appendChild(div);
+            }
+
+            // code for handling typing in the squares
+
+            let index = 0;
+
+            function incIndex(){
+                if(index < 29){
                     index++;
                 }
             }
-        });
-    </script>        
-</body>
+
+            function decIndex(){
+                if(index > 0){
+                    index--;
+                }
+            }
+
+            function isSingleLetter(str) {
+                let regex = /^[A-Za-z]+$/;
+                return str.length === 1 && regex.test(str);
+            }
+
+
+            document.body.addEventListener('keydown', (event) => {
+                let key_str = event.key;
+                const square = getElemById(`grid-item-${index}`);
+
+                if(isSingleLetter(key_str)){
+                    assert(square, "didn't find a square w/ index: " + index);
+                    square.textContent = key_str.toLocaleUpperCase();
+                    incIndex();
+                } else if(key_str == 'Backspace'){
+                    square.textContent = "";
+                    decIndex();
+                }
+            });
+        </script>
+        
+    </body>
 </html>
