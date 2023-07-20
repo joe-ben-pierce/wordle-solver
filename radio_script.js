@@ -15,3 +15,16 @@ radios.forEach(radio => {
         }
     });
 });
+
+
+let radio_ns = {
+    options: radios,
+    get_selected_color: function() {
+        for(let i = 0; i < radios.length; i++){
+            if(radios[i] === selectedRadio){
+                return radios[i].id;
+            }
+        }
+        return getCustomeWhitish();
+    }
+};
