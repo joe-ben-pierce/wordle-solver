@@ -5,6 +5,7 @@
         .container {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
+            grid-auto-rows: 10vh;
             grid-gap: 5px;
         }
 
@@ -25,41 +26,72 @@
 </head>
 <body>
     <div class="container">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
 
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
+        <!-- workaround to make it so there's a keyboard available on mobile -->
+        <input type="text" id="hidden-input" style="opacity: 0; position: absolute;">
 
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
+        <div class="square" id="square0"></div>
+        <div class="square" id="square1"></div>
+        <div class="square" id="square2"></div>
+        <div class="square" id="square3"></div>
+        <div class="square" id="square4"></div>
 
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
+        <div class="square" id="square5"></div>
+        <div class="square" id="square6"></div>
+        <div class="square" id="square7"></div>
+        <div class="square" id="square8"></div>
+        <div class="square" id="square9"></div>
 
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
+        <div class="square" id="square10"></div>
+        <div class="square" id="square11"></div>
+        <div class="square" id="square12"></div>
+        <div class="square" id="square13"></div>
+        <div class="square" id="square14"></div>
 
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
-        <input type="text" class="square" maxlength="1">
+        <div class="square" id="square15"></div>
+        <div class="square" id="square16"></div>
+        <div class="square" id="square17"></div>
+        <div class="square" id="square18"></div>
+        <div class="square" id="square19"></div>
+
+        <div class="square" id="square20"></div>
+        <div class="square" id="square21"></div>
+        <div class="square" id="square22"></div>
+        <div class="square" id="square23"></div>
+        <div class="square" id="square24"></div>
+
+        <div class="square" id="square25"></div>
+        <div class="square" id="square26"></div>
+        <div class="square" id="square27"></div>
+        <div class="square" id="square28"></div>
+        <div class="square" id="square29"></div>
+        
     </div>
+    <button id="show-keyboard">Show Keyboad</button>
+
+    <script>
+        let input = document.getElementById('hidden-input');
+        input.focus(); // automatically 'focus' on the input when the page loads so mobile can get a keyboard
+
+        let keyboard_button = document.getElementById('show-keyboard');
+        keyboard_button.addEventListener('click', () => {
+            input.focus();
+        });
+        let index = 0;
+        
+        document.body.addEventListener('keydown', function(event) {
+            let key = event.key;
+        
+            // Don't capture special keys like Shift, Ctrl, etc.
+            if (key.length === 1) {
+                let square = document.getElementById('square' + index);
+        
+                if (square) {
+                    square.textContent = key;
+                    index++;
+                }
+            }
+        });
+    </script>        
 </body>
 </html>
