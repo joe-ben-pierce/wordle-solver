@@ -20,10 +20,17 @@
         }
 
         #show-keyboard-button {
-            width: 150px; /* Adjust to make the button wider or narrower */
-            height: 50px; /* Adjust to make the button taller or shorter */
-            margin-top: 20px; /* Adds some space between the grid and the button */
-            font-size: 20px; /* Adjust to make the text bigger or smaller */
+            width: 150px;
+            height: 50px;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        #request-word-button {
+            width: 150px;
+            height: 50px;
+            margin-top: 20px;
+            font-size: 20px;
         }
 
         #grid-container {
@@ -86,6 +93,7 @@
     </style>
 
     <script src="utils.js"></script>
+    <script src="valid_words.js"></script>
 </head>
     <body>
         <div id="grid-container"></div>
@@ -108,17 +116,12 @@
 
         <button id="show-keyboard-button">Show Keyboard</button>
 
+        <button id="request-word-button">Request Word</button>
+
         <script>
 
             // get rid of this in prod. Only here so I can know when a change goes through
             // window.onload = () => { alert('Page refreshed at ' + new Date().toLocaleTimeString()); };
-
-            const show_keyboard_button = getElemById('show-keyboard-button');
-
-            // trick to make keyboard show up on mobile devices.
-            show_keyboard_button.addEventListener('click', () => {
-                getElemById('hidden-input').focus();
-            });
 
             // Generate the grid squares
             const gridContainer = document.getElementById('grid-container');
@@ -132,8 +135,15 @@
                 gridContainer.appendChild(div);
             }
 
-            // code for handling typing in the squares
 
+            const show_keyboard_button = getElemById('show-keyboard-button');
+
+            // trick to make keyboard show up on mobile devices.
+            show_keyboard_button.addEventListener('click', () => {
+                getElemById('hidden-input').focus();
+            });
+
+            // code for handling typing in the squares
             let index = 0;
 
             function incIndex(){
@@ -168,6 +178,11 @@
                     decIndex();
                 }
             });
+
+
+            // code for when they ask for a new word
+            const request_word_button = getElemById('request-word-button');
+
         </script>
         
     </body>
