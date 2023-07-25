@@ -19,18 +19,14 @@
             padding-top: 20px;
         }
 
-        #show-keyboard-button {
-            width: 200px;
-            height: 50px;
+        .custom-button {
+            width: auto;
+            height: auto;
             margin-top: 20px;
-            font-size: 20px;
-        }
-
-        #request-word-button {
-            width: 200px;
-            height: 100px;
-            margin-top: 20px;
-            font-size: 20px;
+            font-size: 40px;
+            background-color: black;
+            color: white;
+            border-radius: 20px;
         }
 
         #grid-container {
@@ -127,16 +123,21 @@
             getElemById('hidden-input').value = "nonsense-" + Math.random(); // nonsense so it doesn't try to do autocomplete
         </script>
 
-        <button id="show-keyboard-button">Show Keyboard</button>
+        <button id="show-keyboard-button" class="custom-button">Show Keyboard</button>
 
-        <button id="request-word-button">See possible words</button>
+        <button id="request-word-button" class="custom-button">See possible words</button>
 
         <p id="available-words"></p>
 
         <script>
 
+            function focus_on_hidden_input(){
+                getElemById('hidden-input').focus();
+            }
+
             // get rid of this in prod. Only here so I can know when a change goes through
             // window.onload = () => { alert('Page refreshed at ' + new Date().toLocaleTimeString()); };
+            window.onload = () => { window.scrollTo(0, 0) };
 
             // Generate the grid squares
             const gridContainer = getElemById('grid-container');
@@ -155,7 +156,7 @@
 
             // trick to make keyboard show up on mobile devices.
             show_keyboard_button.addEventListener('click', () => {
-                getElemById('hidden-input').focus();
+                focus_on_hidden_input();
             });
 
             // code for handling typing in the squares
