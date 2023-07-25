@@ -25,6 +25,6 @@ let radio_ns = {
                 return radios[i].id;
             }
         }
-        return getCustomeWhitish();
+        return getCustomWhitishRGB();
     }
 };

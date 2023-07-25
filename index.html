@@ -20,15 +20,15 @@
         }
 
         #show-keyboard-button {
-            width: 150px;
+            width: 200px;
             height: 50px;
             margin-top: 20px;
             font-size: 20px;
         }
 
         #request-word-button {
-            width: 150px;
-            height: 50px;
+            width: 200px;
+            height: 100px;
             margin-top: 20px;
             font-size: 20px;
         }
@@ -68,10 +68,9 @@
         }
 
         /* Use these classes to set the color of each option */
-        .red { background-color: red; }
         .green { background-color: green; }
-        .blue { background-color: blue; }
         .yellow { background-color: yellow; }
+        .grey { background-color: grey;}
 
         /* Hide the actual radio buttons */
         .color-radio {
@@ -88,6 +87,13 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+        }
+
+        #available-words {
+            font-size: 40px;
+            word-wrap: break-word;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
     </style>
@@ -116,7 +122,9 @@
 
         <button id="show-keyboard-button">Show Keyboard</button>
 
-        <button id="request-word-button">Request Word</button>
+        <button id="request-word-button">See possible words</button>
+
+        <p id="available-words"></p>
 
         <script>
 
@@ -124,7 +132,7 @@
             // window.onload = () => { alert('Page refreshed at ' + new Date().toLocaleTimeString()); };
 
             // Generate the grid squares
-            const gridContainer = document.getElementById('grid-container');
+            const gridContainer = getElemById('grid-container');
             for (let i = 0; i < 30; i++) {
                 const div = document.createElement('div');
                 div.classList.add('grid-item');
@@ -174,16 +182,107 @@
                     incIndex();
                 } else if(key_str == 'Backspace'){
                     square.textContent = "";
-                    square.style.backgroundColor = getCustomeWhitish();
+                    square.style.backgroundColor = getCustomWhitishHex();
                     decIndex();
                 }
             });
 
 
             // code for when they ask for a new word
+            const colorOptions = {
+                'white': getCustomWhitishRGB(),
+                'green': getComputedStyle(document.querySelector('.green')).backgroundColor,
+                'yellow': getComputedStyle(document.querySelector('.yellow')).backgroundColor,
+                'grey': getComputedStyle(document.querySelector('.grey')).backgroundColor
+            };
+
+
+            function getGridData() {
+                // Compute the RGB value of each color option
+                const gridData = [];
+                for(let i = 0; i < 30; i++) {
+                    const square = document.getElementById(`grid-item-${i}`);
+                    const color = getComputedStyle(square).backgroundColor; // Get the current background color
+                    const text = square.textContent; // Get the text content
+
+                    let readableColor = 'unknown color';
+                    // Compare the square's color with each color option
+                    for (const [option, rgb] of Object.entries(colorOptions)) {
+                        if (color === rgb) {
+                            readableColor = option;
+                            break;
+                        }
+                    }
+                    assert(readableColor != 'unknown color', 'one of the colors could not be correctly found');
+                    
+                    gridData.push({color: readableColor, text: text}); // Push an object with the color and text to the array
+                }
+                return gridData;
+            }
+
+            function get_known_colored_letters(){
+                let grid_data = getGridData();
+                let letters_per_row = 5;
+                let result = [];
+                for(let i = 0; i < grid_data.length; i++){
+                    let column_index = i % letters_per_row; // the index of the letter in it's 5 letter word
+                    let cell_data = grid_data[i];
+                    if(cell_data.color != 'white' && cell_data.text != ''){
+                        result.push({
+                            color: cell_data.color,
+                            text: cell_data.text.toLowerCase(),
+                            index: column_index
+                        });
+                    }
+                }
+                return result;
+            }
+
+            function is_possible(candidate_word, known_colored_letters){
+                for(const colored_letter of known_colored_letters){
+                    let color = colored_letter.color;
+                    let letter = colored_letter.text;
+                    let index = colored_letter.index;
+                    if(color === 'green'){
+                        if(candidate_word[index] !== letter){
+                            return false;
+                        }
+                    }
+                    else if(color === 'yellow'){
+                        if(!candidate_word.includes(letter) || candidate_word[index] === letter){
+                            return false;
+                        }
+                    }
+                    else{
+                        assert(color === 'grey', 'color was not in the allowed list of colors. It was: ' + color);
+                        if(candidate_word.includes(letter)){
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            function get_possible_words(){
+                let all_words = get_valid_words(); // definied in valid_words.js
+                let known_colored_letters = get_known_colored_letters();
+                let remaining_words = [];
+                for(let word of all_words){
+                    if(is_possible(word, known_colored_letters)){
+                        remaining_words.push(word);
+                    }
+                }
+                return remaining_words;
+            }
+
+
+
             const request_word_button = getElemById('request-word-button');
 
+            request_word_button.addEventListener('click', function(){
+                getElemById('available-words').textContent = lst_to_txt(get_possible_words());
+            });
+
         </script>
-        
     </body>
 </html>
