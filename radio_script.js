@@ -20,9 +20,19 @@ radios.forEach(radio => {
 let radio_ns = {
     options: radios,
     get_selected_color: function() {
+        // alert("called the func");
         for(let i = 0; i < radios.length; i++){
             if(radios[i] === selectedRadio){
-                return radios[i].id;
+                let btn_name = radios[i].id;
+                if(btn_name === "green-radio-btn"){
+                    return hexToRGB(get_css_color_var("--custom-green"));
+                } else if(btn_name === "yellow-radio-btn"){
+                    return hexToRGB(get_css_color_var("--custom-yellow"));
+                } else if(btn_name === "grey-radio-btn"){
+                    return hexToRGB(get_css_color_var("--custom-grey"));
+                } else {
+                    assert(false, `failed to find a match for the radio button with id: ${btn_name}`);
+                }
             }
         }
         return getCustomWhitishRGB();

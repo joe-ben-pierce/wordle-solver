@@ -12,10 +12,14 @@ function getElemById(id){
     return result;
 }
 
-function getCustomWhitishHex(){
-    let result = getComputedStyle(root).getPropertyValue('--custom-whitish');
-    assert(result, 'could not find the --custom-whitish');
+function get_css_color_var(var_name){
+    let result = getComputedStyle(document.documentElement).getPropertyValue(var_name);
+    assert(result, `could not find color var ${var_name}`);
     return result;
+}
+
+function getCustomWhitishHex(){
+    return get_css_color_var("--custom-whitish");
 }
 
 

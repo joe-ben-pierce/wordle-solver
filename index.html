@@ -6,6 +6,9 @@
             --square-size: 15vw; /* You can change this to tweak the size of the squares */
             --circle-size: 75px; /* This is the size of the colored circles in the radio button */
             --custom-whitish: #f0f0f0;
+            --custom-yellow: #c9b458;
+            --custom-green: #6aaa64;
+            --custom-grey: #787c7e;
         }
 
         body {
@@ -64,9 +67,9 @@
         }
 
         /* Use these classes to set the color of each option */
-        .green { background-color: green; }
-        .yellow { background-color: yellow; }
-        .grey { background-color: grey;}
+        .green { background-color: var(--custom-green); }
+        .yellow { background-color: var(--custom-yellow); }
+        .grey { background-color: var(--custom-grey);}
 
         /* Hide the actual radio buttons */
         .color-radio {
@@ -90,6 +93,7 @@
             word-wrap: break-word;
             padding-left: 20px;
             padding-right: 20px;
+            text-align: center;
         }
 
     </style>
@@ -104,14 +108,14 @@
         <div id="grid-container"></div>
 
         <div id="radio-container">
-            <input type="radio" id="green" name="color" class="color-radio">
-            <label for="green" class="color-option green"></label>
+            <input type="radio" id="green-radio-btn" name="color" class="color-radio">
+            <label for="green-radio-btn" class="color-option green"></label>
         
-            <input type="radio" id="yellow" name="color" class="color-radio">
-            <label for="yellow" class="color-option yellow"></label>
+            <input type="radio" id="yellow-radio-btn" name="color" class="color-radio">
+            <label for="yellow-radio-btn" class="color-option yellow"></label>
         
-            <input type="radio" id="grey" name="color" class="color-radio">
-            <label for="grey" class="color-option grey"></label>
+            <input type="radio" id="grey-radio-btn" name="color" class="color-radio">
+            <label for="grey-radio-btn" class="color-option grey"></label>
         
         </div>
 
