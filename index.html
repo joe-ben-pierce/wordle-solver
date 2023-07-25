@@ -102,6 +102,9 @@
     <script src="valid_words.js"></script>
 </head>
     <body>
+
+        <p id="index-marker" style="font-size: 20px;">index: 0</p>
+
         <div id="grid-container"></div>
 
         <div id="radio-container">
@@ -118,7 +121,11 @@
 
         <script src="radio_script.js"></script>
 
-        <input type="text" id="hidden-input" style="opacity: 0; position: absolute; pointer-events: none;">
+        <input type="text" id="hidden-input" style="opacity: 0; position: absolute; pointer-events: none;" autocomplete="off">
+
+        <script>
+            getElemById('hidden-input').value = "nonsense-" + Math.random(); // nonsense so it doesn't try to do autocomplete
+        </script>
 
         <button id="show-keyboard-button">Show Keyboard</button>
 
@@ -154,37 +161,37 @@
             // code for handling typing in the squares
             let index = 0;
 
-            function incIndex(){
-                if(index < 29){
-                    index++;
+            function add_to_index(amt){
+                let new_index = index + amt;
+                if(0 <= new_index && new_index <= 29){
+                    index = new_index;
                 }
+            }
+
+            function incIndex(){
+                add_to_index(1);
             }
 
             function decIndex(){
-                if(index > 0){
-                    index--;
-                }
+                add_to_index(-1);
             }
 
-            function isSingleLetter(str) {
-                let regex = /^[A-Za-z]+$/;
-                return str.length === 1 && regex.test(str);
+            function get_curr_square(){
+                return getElemById(`grid-item-${index}`);
             }
 
 
             document.body.addEventListener('keydown', (event) => {
                 let key_str = event.key;
-                const square = getElemById(`grid-item-${index}`);
 
                 if(isSingleLetter(key_str)){
-                    assert(square, "didn't find a square w/ index: " + index);
-                    square.textContent = key_str.toLocaleUpperCase();
+                    get_curr_square().textContent = key_str.toLocaleUpperCase();
                     incIndex();
                 } else if(key_str == 'Backspace'){
-                    square.textContent = "";
-                    square.style.backgroundColor = getCustomWhitishHex();
                     decIndex();
+                    get_curr_square().textContent = "";
                 }
+                getElemById('index-marker').textContent = `index: ${index}`;
             });
 
 

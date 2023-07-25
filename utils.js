@@ -48,3 +48,8 @@ function lst_to_txt(lst){
     }
     return parts.join('');
 }
+
+function isSingleLetter(str) {
+    let regex = /^[A-Za-z]+$/;
+    return str.length === 1 && regex.test(str);
+}
