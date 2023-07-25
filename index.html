@@ -103,7 +103,7 @@
 </head>
     <body>
 
-        <p id="index-marker" style="font-size: 20px;">index: 0</p>
+        <!-- <p id="index-marker" style="font-size: 20px;">index: 0</p> -->
 
         <div id="grid-container"></div>
 
@@ -191,7 +191,7 @@
                     decIndex();
                     get_curr_square().textContent = "";
                 }
-                getElemById('index-marker').textContent = `index: ${index}`;
+                // getElemById('index-marker').textContent = `index: ${index}`;
             });
 
 
@@ -287,7 +287,14 @@
             const request_word_button = getElemById('request-word-button');
 
             request_word_button.addEventListener('click', function(){
-                getElemById('available-words').textContent = lst_to_txt(get_possible_words());
+                let avaibable_words_lst = get_possible_words();
+                if(avaibable_words_lst.length === 0){
+                    getElemById('available-words').textContent = 
+                        "Sorry, there are no words in the word list that meet all the requirements." 
+                        + "Try double checking that you're letters and colors are correct.";
+                } else {
+                    getElemById('available-words').textContent = lst_to_txt(avaibable_words_lst);
+                }
             });
 
         </script>
