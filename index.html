@@ -128,7 +128,7 @@
             getElemById('hidden-input').value = "nonsense-" + Math.random(); // nonsense so it doesn't try to do autocomplete
         </script>
 
-        <button id="show-keyboard-button" class="custom-button">Show Keyboard</button>
+        <!-- <button id="show-keyboard-button" class="custom-button">Show Keyboard</button> -->
 
         <button id="request-word-button" class="custom-button">See possible words</button>
 
@@ -155,7 +155,7 @@
                 div.addEventListener('click', function(){
                     let curr_color = radio_ns.get_selected_color();
                     let this_color = this.style.backgroundColor;
-                    if(this_color === curr_color || (curr_color == getCustomWhitishRGB() && this_color === "")){
+                    if(this_color === curr_color || (curr_color == getCustomWhitishRGB() && this_color === "") || this.textContent === ""){
                         set_index(i);
                         focus_on_hidden_input();
                     } else {
@@ -167,12 +167,12 @@
             }
 
 
-            const show_keyboard_button = getElemById('show-keyboard-button');
+            // const show_keyboard_button = getElemById('show-keyboard-button');
 
-            // trick to make keyboard show up on mobile devices.
-            show_keyboard_button.addEventListener('click', () => {
-                focus_on_hidden_input();
-            });
+            // // trick to make keyboard show up on mobile devices.
+            // show_keyboard_button.addEventListener('click', () => {
+            //     focus_on_hidden_input();
+            // });
 
             // code for handling typing in the squares
             let index = 0;
@@ -215,7 +215,6 @@
                     decIndex();
                     get_curr_square().textContent = "";
                 }
-                // getElemById('index-marker').textContent = `index: ${index}`;
             });
 
 
