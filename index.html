@@ -138,6 +138,7 @@
 
             function focus_on_hidden_input(){
                 getElemById('hidden-input').focus();
+                radio_ns.deselect_all_radios();
             }
 
 
@@ -153,7 +154,8 @@
                 div.id = `grid-item-${i}`; // give each square it's own id so I can get it easily
                 div.addEventListener('click', function(){
                     let curr_color = radio_ns.get_selected_color();
-                    if(this.style.backgroundColor === curr_color){
+                    let this_color = this.style.backgroundColor;
+                    if(this_color === curr_color || (curr_color == getCustomWhitishRGB() && this_color === "")){
                         set_index(i);
                         focus_on_hidden_input();
                     } else {
@@ -318,6 +320,7 @@
 
             request_word_button.addEventListener('click', function(){
                 let avaibable_words_lst = get_possible_words();
+                radio_ns.deselect_all_radios();
                 if(avaibable_words_lst.length === 0){
                     getElemById('available-words').textContent = 
                         "Sorry, there are no words in the word list that meet all the requirements." 

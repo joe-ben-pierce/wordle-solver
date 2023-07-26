@@ -36,5 +36,11 @@ let radio_ns = {
             }
         }
         return getCustomWhitishRGB();
+    },
+    deselect_all_radios: function() {
+        for(btn of radios){
+            btn.checked = false;
+        }
+        selectedRadio = null;
     }
 };
