@@ -152,9 +152,14 @@
                 div.classList.add('grid-item');
                 div.id = `grid-item-${i}`; // give each square it's own id so I can get it easily
                 div.addEventListener('click', function(){
-                    this.style.backgroundColor = radio_ns.get_selected_color();
-                    set_index(i);
-                    focus_on_hidden_input();
+                    let curr_color = radio_ns.get_selected_color();
+                    if(this.style.backgroundColor === curr_color){
+                        set_index(i);
+                        focus_on_hidden_input();
+                    } else {
+                        this.style.backgroundColor = radio_ns.get_selected_color();
+                    }
+                    
                 });
                 gridContainer.appendChild(div);
             }
