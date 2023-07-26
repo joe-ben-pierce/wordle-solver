@@ -128,8 +128,6 @@
             getElemById('hidden-input').value = "nonsense-" + Math.random(); // nonsense so it doesn't try to do autocomplete
         </script>
 
-        <!-- <button id="show-keyboard-button" class="custom-button">Show Keyboard</button> -->
-
         <button id="request-word-button" class="custom-button">See possible words</button>
 
         <p id="available-words"></p>
@@ -155,7 +153,9 @@
                 div.addEventListener('click', function(){
                     let curr_color = radio_ns.get_selected_color();
                     let this_color = this.style.backgroundColor;
-                    if(this_color === curr_color || (curr_color == getCustomWhitishRGB() && this_color === "") || this.textContent === ""){
+                    if(this_color === curr_color 
+                        || curr_color == getCustomWhitishRGB() 
+                        || this.textContent === ""){
                         set_index(i);
                         focus_on_hidden_input();
                     } else {
@@ -165,14 +165,6 @@
                 });
                 gridContainer.appendChild(div);
             }
-
-
-            // const show_keyboard_button = getElemById('show-keyboard-button');
-
-            // // trick to make keyboard show up on mobile devices.
-            // show_keyboard_button.addEventListener('click', () => {
-            //     focus_on_hidden_input();
-            // });
 
             // code for handling typing in the squares
             let index = 0;
@@ -185,7 +177,6 @@
                 for(let square of grid_objects){
                     square.style.borderColor = get_css_color_var("--square-border-grey");
                 }
-                // get_curr_square().style.borderColor = "blue";
             }
 
             function add_to_index(amt){
