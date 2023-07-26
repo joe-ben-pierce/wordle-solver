@@ -9,6 +9,7 @@
             --custom-yellow: #c9b458;
             --custom-green: #6aaa64;
             --custom-grey: #787c7e;
+            --square-border-grey: #808080;
         }
 
         body {
@@ -47,7 +48,7 @@
             width: var(--square-size);
             height: var(--square-size);
             background-color: var(--custom-whitish);
-            border: 3px solid gray;
+            border: 3px solid var(--square-border-grey);
 
             /* The following part is about the text in the boxes */
             display: flex;
@@ -139,6 +140,7 @@
                 getElemById('hidden-input').focus();
             }
 
+
             // get rid of this in prod. Only here so I can know when a change goes through
             // window.onload = () => { alert('Page refreshed at ' + new Date().toLocaleTimeString()); };
             window.onload = () => { window.scrollTo(0, 0) };
@@ -151,6 +153,8 @@
                 div.id = `grid-item-${i}`; // give each square it's own id so I can get it easily
                 div.addEventListener('click', function(){
                     this.style.backgroundColor = radio_ns.get_selected_color();
+                    set_index(i);
+                    focus_on_hidden_input();
                 });
                 gridContainer.appendChild(div);
             }
@@ -166,12 +170,21 @@
             // code for handling typing in the squares
             let index = 0;
 
-            function add_to_index(amt){
-                let new_index = index + amt;
-                if(0 <= new_index && new_index <= 29){
-                    index = new_index;
+            function set_index(idx){
+                if(0 <= idx && idx <= 29){
+                    index = idx;
                 }
+                let grid_objects = get_grid_objects();
+                for(let square of grid_objects){
+                    square.style.borderColor = get_css_color_var("--square-border-grey");
+                }
+                get_curr_square().style.borderColor = "blue";
             }
+
+            function add_to_index(amt){
+                set_index(index + amt);
+            }
+
 
             function incIndex(){
                 add_to_index(1);
@@ -184,7 +197,6 @@
             function get_curr_square(){
                 return getElemById(`grid-item-${index}`);
             }
-
 
             document.body.addEventListener('keydown', (event) => {
                 let key_str = event.key;
@@ -208,10 +220,18 @@
                 'grey': getComputedStyle(document.querySelector('.grey')).backgroundColor
             };
 
+            function get_grid_objects(){
+                let result = [];
+                for(let i = 0; i < 30; i++){
+                    result.push(getElemById(`grid-item-${i}`));
+                }
+                return result;
+            }
+
 
             function getGridData() {
                 // Compute the RGB value of each color option
-                const gridData = [];
+                let gridData = [];
                 for(let i = 0; i < 30; i++) {
                     const square = document.getElementById(`grid-item-${i}`);
                     const color = getComputedStyle(square).backgroundColor; // Get the current background color
@@ -302,6 +322,11 @@
                 }
             });
 
+        </script>
+
+        <!-- script for doing startup things -->
+        <script>
+            set_index(0);
         </script>
     </body>
 </html>
