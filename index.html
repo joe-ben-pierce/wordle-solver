@@ -56,6 +56,7 @@
             align-items: center;
             text-align: center;
             font-size: calc(var(--square-size) / 1.2); /* Make the font barely smaller than the squares */
+            font-family: "Times new Roman", "Clear Sans", "Helvetica Neue", Arial, sans-serif;
         }
 
         .color-option {
@@ -153,11 +154,17 @@
                     let this_color = this.style.backgroundColor;
                     if(this_color === curr_color 
                         || curr_color == getCustomWhitishRGB() 
-                        || this.textContent === ""){
+                        || this.textContent === "") {
                         set_index(i);
                         focus_on_hidden_input();
                     } else {
-                        this.style.backgroundColor = radio_ns.get_selected_color();
+                        if (curr_color === getCustomWhitishRGB() || curr_color === ""){
+                            this.style.backgroundColor = getCustomWhitishRGB();
+                            this.style.color = "black";
+                        } else {
+                            this.style.backgroundColor = curr_color;
+                            this.style.color = "white";
+                        }
                     }
                     
                 });
