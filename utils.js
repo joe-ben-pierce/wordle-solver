@@ -2,7 +2,7 @@ const root = document.documentElement;
 
 function assert(condition, message = "generic msg"){
     if(!condition){
-        alert(`assertion failed: ${message}`);
+        alert(`Oops, I messed up. Please text me, -joe: '${message}'`);
     }
 }
 
@@ -57,3 +57,9 @@ function isSingleLetter(str) {
     let regex = /^[A-Za-z]+$/;
     return str.length === 1 && regex.test(str);
 }
+
+
+function count_that_pass(arr, test) {
+    return arr.reduce((count, item) => count + (test(item) ? 1 : 0), 0);
+}
+  

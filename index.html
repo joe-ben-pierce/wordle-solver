@@ -56,7 +56,7 @@
             align-items: center;
             text-align: center;
             font-size: calc(var(--square-size) / 1.2); /* Make the font barely smaller than the squares */
-            font-family: "Times new Roman", "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+            font-family: "Times new Roman", serif;
         }
 
         .color-option {
@@ -153,7 +153,7 @@
                     let curr_color = radio_ns.get_selected_color();
                     let this_color = this.style.backgroundColor;
                     if(this_color === curr_color 
-                        || curr_color == getCustomWhitishRGB() 
+                        || curr_color === getCustomWhitishRGB() 
                         || this.textContent === "") {
                         set_index(i);
                         focus_on_hidden_input();
@@ -260,23 +260,30 @@
                 let result = [];
                 for(let i = 0; i < grid_data.length; i++){
                     let column_index = i % letters_per_row; // the index of the letter in it's 5 letter word
+                    let row_index = Math.floor(i / letters_per_row);
                     let cell_data = grid_data[i];
                     if(cell_data.color != 'white' && cell_data.text != ''){
                         result.push({
                             color: cell_data.color,
                             text: cell_data.text.toLowerCase(),
-                            index: column_index
+                            index: column_index,
+                            row: row_index
                         });
                     }
                 }
                 return result;
             }
 
+            function count_letter_in_word(word, letter){
+                return count_that_pass(word.split(""), ltr => ltr === letter);
+            }
+
             function is_possible(candidate_word, known_colored_letters){
                 for(const colored_letter of known_colored_letters){
                     let color = colored_letter.color;
                     let letter = colored_letter.text;
-                    let index = colored_letter.index;
+                    let index = colored_letter.index; // index is another name for col
+                    let row = colored_letter.row;
                     if(color === 'green'){
                         if(candidate_word[index] !== letter){
                             return false;
@@ -289,7 +296,14 @@
                     }
                     else{
                         assert(color === 'grey', 'color was not in the allowed list of colors. It was: ' + color);
-                        if(candidate_word.includes(letter)){
+                        // get all the letters in this row
+                        // note: the curr letter itself will be included
+                        let all_letters_row = known_colored_letters.filter(col_letter => col_letter.row === row);
+                        // count how many times that letter shows up as not grey
+                        let count_not_grey = count_that_pass(all_letters_row, col_ltr => (col_ltr.text === letter) && (col_ltr.color !== 'grey'));
+                        // check if the candidate_word includes that letter too many times
+                        let number_of_ltr_instances = count_letter_in_word(candidate_word, letter);
+                        if(number_of_ltr_instances > count_not_grey){
                             return false;
                         }
                     }
