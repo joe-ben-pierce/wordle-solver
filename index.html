@@ -140,10 +140,8 @@
 
 
             // get rid of this in prod. Only here so I can know when a change goes through
-            // window.onload = () => { alert('Page refreshed at ' + new Date().toLocaleTimeString()); };
-            window.onload = () => { window.scrollTo(0, 0) };
-
-            // useless comment.
+            window.onload = () => { alert('Page refreshed at ' + new Date().toLocaleTimeString()); };
+            // window.onload = () => { window.scrollTo(0, 0) };
 
             // Generate the grid squares
             const gridContainer = getElemById('grid-container');
@@ -292,12 +290,19 @@
                         }
                     }
                     else if(color === 'yellow'){
-                        if(!candidate_word.includes(letter) || candidate_word[index] === letter){
+                        let all_letters_in_row = known_colored_letters.filter(x => x.row === row);
+                        // note: all_letters_in_row includes current 'colored_letter'
+
+                        // I want to count how many times that letter is yellow OR green
+                        let count_yellow_or_green = count_that_pass(all_letters_in_row, x => (x.text === letter) && (x.color !== 'grey'));
+
+                        if(count_letter_in_word(candidate_word, letter) < count_yellow_or_green){
+                            return false;
+                        } else if(candidate_word[index] === letter){
                             return false;
                         }
                     }
-                    else{
-                        assert(color === 'grey', 'color was not in the allowed list of colors. It was: ' + color);
+                    else if(color === 'grey'){
                         // get all the letters in this row
                         // note: the curr letter itself will be included
                         let all_letters_row = known_colored_letters.filter(col_letter => col_letter.row === row);
@@ -308,6 +313,8 @@
                         if(number_of_ltr_instances > count_not_grey){
                             return false;
                         }
+                    } else {
+                        assert(false, 'color was not in the allowed list of colors. It was: ' + color);
                     }
                 }
                 return true;
