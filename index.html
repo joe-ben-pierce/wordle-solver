@@ -140,8 +140,8 @@
 
 
             // get rid of this in prod. Only here so I can know when a change goes through
-            window.onload = () => { alert('Page refreshed at ' + new Date().toLocaleTimeString()); };
-            // window.onload = () => { window.scrollTo(0, 0) };
+            // window.onload = () => { alert('You should not be seeing this!!! Text Joe and tell him to fix it :)'); };
+            window.onload = () => { window.scrollTo(0, 0) };
 
             // Generate the grid squares
             const gridContainer = getElemById('grid-container');
